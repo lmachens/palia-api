@@ -75,6 +75,7 @@ async function handlePOST(req: Request) {
           "DefaultPhysicsVolume",
           "BP_EnvironmentManager",
           "GameplayHUD",
+          "BP_HousingPlotUnlockDebrisActor",
           "VAL_",
           "LimitedEventManagerBase",
           "BlueprintGeneratedClass",
