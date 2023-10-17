@@ -17,14 +17,14 @@ export async function fetchNodes(req: Request) {
     return new Response("", {
       status: 204,
       headers: {
-        "Access-Control-Allow-Origin:": "*",
+        "Access-Control-Allow-Origin": "*",
         Allow: "OPTIONS, GET, POST",
       },
     });
   }
   return new Response("Method not allowed", {
     status: 405,
-    headers: { "Access-Control-Allow-Origin:": "*" },
+    headers: { "Access-Control-Allow-Origin": "*" },
   });
 }
 
@@ -32,7 +32,7 @@ async function handlePOST(req: Request) {
   if (req.headers.get("content-type") !== "application/json") {
     return new Response("Bad request", {
       status: 400,
-      headers: { "Access-Control-Allow-Origin:": "*" },
+      headers: { "Access-Control-Allow-Origin": "*" },
     });
   }
   try {
@@ -40,7 +40,7 @@ async function handlePOST(req: Request) {
     if (!body) {
       return new Response("Bad request", {
         status: 400,
-        headers: { "Access-Control-Allow-Origin:": "*" },
+        headers: { "Access-Control-Allow-Origin": "*" },
       });
     }
     if (!validateActors(body)) {
@@ -49,7 +49,7 @@ async function handlePOST(req: Request) {
         .join("\n");
       return new Response(`Invalid actor: ${message}`, {
         status: 400,
-        headers: { "Access-Control-Allow-Origin:": "*" },
+        headers: { "Access-Control-Allow-Origin": "*" },
       });
     }
 
@@ -73,13 +73,13 @@ async function handlePOST(req: Request) {
     });
 
     return new Response(`Inserted ${count} nodes`, {
-      headers: { "Access-Control-Allow-Origin:": "*" },
+      headers: { "Access-Control-Allow-Origin": "*" },
     });
   } catch (e) {
     if (e instanceof SyntaxError) {
       return new Response("Bad request", {
         status: 400,
-        headers: { "Access-Control-Allow-Origin:": "*" },
+        headers: { "Access-Control-Allow-Origin": "*" },
       });
     }
     throw e;
@@ -88,5 +88,7 @@ async function handlePOST(req: Request) {
 
 async function handleGET(_req: Request) {
   const spawnNodes = getSpawnNodes();
-  return new Response(JSON.stringify(spawnNodes));
+  return new Response(JSON.stringify(spawnNodes), {
+    headers: { "Access-Control-Allow-Origin": "*" },
+  });
 }
