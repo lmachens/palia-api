@@ -1,9 +1,8 @@
 import { Node } from "./nodes";
 import { WeeklyWants } from "./weekly-wants";
 
-const fileName =
-  process.env.NODE_ENV === "production" ? "db.json" : "db-dev.json";
-const filePath = import.meta.dir + `/../${fileName}`;
+const filePath = import.meta.dir + `/../db.json`;
+console.log("DB file path:", filePath);
 let file = Bun.file(filePath);
 if (!(await file.exists())) {
   await Bun.write(
