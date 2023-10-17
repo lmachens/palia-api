@@ -73,8 +73,14 @@ async function handlePOST(req: Request) {
       if (
         [
           "DefaultPhysicsVolume",
+          "BP_EnvironmentManager",
+          "GameplayHUD",
           "VAL_",
+          "LimitedEventManagerBase",
+          "BlueprintGeneratedClass",
+          "BP_LimitedEventManager",
           "BP_Env_",
+          "BP_AudioPool_",
           "BP_MajiMarket_",
           "BP_Palcat_",
           "BP_Bobber_",
