@@ -13,4 +13,4 @@ helm-charts
 .editorconfig
 .idea
 coverage*
-db-dev.json
+db.json

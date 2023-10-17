@@ -32,10 +32,10 @@ COPY --from=install /temp/prod/node_modules node_modules
 COPY --from=prerelease /usr/src/app/index.ts .
 COPY --from=prerelease /usr/src/app/lib lib
 COPY --from=prerelease /usr/src/app/routes routes
-COPY --from=prerelease /usr/src/app/db.json .
 COPY --from=prerelease /usr/src/app/package.json .
+RUN chown bun /usr/src/app
 
 # run the app
 USER bun
 EXPOSE 3000/tcp
-ENTRYPOINT [ "bun", "run", "index.ts" ]
+ENTRYPOINT [ "bun", "start" ]
