@@ -72,6 +72,33 @@ async function handlePOST(req: Request) {
     nodes.forEach((node) => {
       const spawnNodes = getSpawnNodes();
       if (spawnNodes[node.type]) {
+        if (
+          [
+            "BP_MajiMarket_",
+            "BP_Palcat_",
+            "BP_Bobber_",
+            "BP_QuestItem_",
+            "BP_Villager",
+            "BP_ValeriaPlayerController_",
+            "BP_ValeriaCharacter_",
+            "BP_ValeriaGameState_",
+            "BP_vfx",
+            "BP_Decor_",
+            "BP_BackpackUpgrade",
+            "BP_Axe_",
+            "BP_Dummy",
+            "BP_CharacterPreview",
+            "BP_Garden",
+            "BP_MainHouse",
+            "BP_Master_",
+          ].some((i) => node.type.toLowerCase().startsWith(i.toLowerCase())) ||
+          ["EquipView", "MirrorImage", "Arrow", "Glider"].some((i) =>
+            node.type.toLowerCase().includes(i.toLowerCase())
+          )
+        ) {
+          return;
+        }
+
         const isTooClose = spawnNodes[node.type].some((spawnNode) => {
           const distance = calculateDistance(node, spawnNode);
           const minDistance = getMinDistance(node.type);
