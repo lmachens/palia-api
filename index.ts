@@ -2,7 +2,6 @@ import { fetchNodes } from "./routes/nodes/route";
 import { fetchWeeklyWants } from "./routes/weekly-wants/route";
 
 Bun.serve({
-  port: 4123,
   fetch(req) {
     const url = new URL(req.url);
     if (url.pathname.startsWith("/nodes")) return fetchNodes(req);
