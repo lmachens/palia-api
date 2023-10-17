@@ -33,9 +33,11 @@ COPY --from=prerelease /usr/src/app/index.ts .
 COPY --from=prerelease /usr/src/app/lib lib
 COPY --from=prerelease /usr/src/app/routes routes
 COPY --from=prerelease /usr/src/app/package.json .
-RUN chown bun /usr/src/app
+RUN mkdir /usr/src/app/data
+RUN chown bun /usr/src/app/data
 
 # run the app
 USER bun
+VOLUME /usr/src/app/data
 EXPOSE 3000/tcp
-ENTRYPOINT [ "bun", "run", "index.ts" ]
+ENTRYPOINT [ "bun", "start" ]
