@@ -1,8 +1,6 @@
 # use the official Bun image
 # see all versions at https://hub.docker.com/r/oven/bun/tags
-#FROM oven/bun:1 as base
-FROM --platform=$BUILDPLATFORM docker.io/library/node:current as base
-RUN npm install --global bun
+FROM oven/bun:1 as base
 WORKDIR /usr/src/app
 
 # install dependencies into temp directory
@@ -35,11 +33,8 @@ COPY --from=prerelease /usr/src/app/index.ts .
 COPY --from=prerelease /usr/src/app/lib lib
 COPY --from=prerelease /usr/src/app/routes routes
 COPY --from=prerelease /usr/src/app/package.json .
-RUN mkdir /usr/src/app/data
-# RUN chown bun /usr/src/app/data
 
 # run the app
-# USER bun
-VOLUME /usr/src/app/data
+USER bun
 EXPOSE 3000/tcp
 ENTRYPOINT [ "bun", "start" ]
