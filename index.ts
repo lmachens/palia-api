@@ -17,3 +17,5 @@ Bun.serve({
     });
   },
 });
+
+console.log("Server is ready");

@@ -1,7 +1,8 @@
 import { Node } from "./nodes";
 import { WeeklyWants } from "./weekly-wants";
 
-const filePath = import.meta.dir + `/../db.json`;
+Bun.main.replace("index.ts", "db.json");
+const filePath = Bun.main.replace("index.ts", "db.json");
 console.log("DB file path:", filePath);
 let file = Bun.file(filePath);
 try {
