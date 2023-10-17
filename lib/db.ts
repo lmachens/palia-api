@@ -1,6 +1,7 @@
-import { Node } from "./actors";
+import { Node } from "./nodes";
+import { CurrentGiftPreferences } from "./weekly-wants";
 
-const file = Bun.file(import.meta.dir + "/../db.json");
+let file = Bun.file(import.meta.dir + "/../db.json");
 if (!(await file.exists())) {
   await Bun.write(
     file,
@@ -8,9 +9,11 @@ if (!(await file.exists())) {
       spawnNodes: {},
     })
   );
+  file = Bun.file(import.meta.dir + "/../db.json");
 }
 export const db = (await file.json()) as {
   spawnNodes: Record<string, Node[]>;
+  weeklyWants?: CurrentGiftPreferences;
 };
 
 export function getSpawnNodes() {
@@ -21,6 +24,24 @@ export function insertNode(node: Node) {
   db.spawnNodes[node.type] = db.spawnNodes[node.type] || [];
   db.spawnNodes[node.type].push(node);
   debounceWrite();
+}
+
+export function getWeeklyWants() {
+  return db.weeklyWants;
+}
+
+export function updateWeeklyWants(weeklyWants: CurrentGiftPreferences) {
+  if (db.weeklyWants) {
+    if (
+      db.weeklyWants.preferenceDataVersionNumber >=
+      weeklyWants.preferenceDataVersionNumber
+    ) {
+      return false;
+    }
+  }
+  db.weeklyWants = weeklyWants;
+  debounceWrite();
+  return true;
 }
 
 const DEBOUNCE_TIME = 10000;

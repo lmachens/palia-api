@@ -1,15 +1,22 @@
+import { getSpawnNodes, insertNode } from "../../lib/db";
 import {
   calculateDistance,
   getMinDistance,
   toNode,
   validateActors,
-} from "../../lib/actors";
-import { getSpawnNodes, insertNode } from "../../lib/db";
+} from "../../lib/nodes";
 
 export async function fetchNodes(req: Request) {
-  if (req.method !== "POST") {
-    return new Response("Method not allowed", { status: 405 });
+  if (req.method === "POST") {
+    return handlePOST(req);
   }
+  if (req.method === "GET") {
+    return handleGET(req);
+  }
+  return new Response("Method not allowed", { status: 405 });
+}
+
+async function handlePOST(req: Request) {
   if (req.headers.get("content-type") !== "application/json") {
     return new Response("Bad request", { status: 400 });
   }
@@ -51,4 +58,9 @@ export async function fetchNodes(req: Request) {
     }
     throw e;
   }
+}
+
+async function handleGET(_req: Request) {
+  const spawnNodes = getSpawnNodes();
+  return new Response(JSON.stringify(spawnNodes));
 }
