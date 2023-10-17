@@ -4,14 +4,18 @@ import { WeeklyWants } from "./weekly-wants";
 const filePath = import.meta.dir + `/../db.json`;
 console.log("DB file path:", filePath);
 let file = Bun.file(filePath);
-if (!(await file.exists())) {
-  await Bun.write(
-    file,
-    JSON.stringify({
-      spawnNodes: {},
-    })
-  );
-  file = Bun.file(filePath);
+try {
+  if (!(await file.exists())) {
+    await Bun.write(
+      file,
+      JSON.stringify({
+        spawnNodes: {},
+      })
+    );
+    file = Bun.file(filePath);
+  }
+} catch (e) {
+  console.error(e);
 }
 export const db = (await file.json()) as {
   spawnNodes: Record<string, Node[]>;
