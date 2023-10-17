@@ -1,6 +1,8 @@
 # use the official Bun image
 # see all versions at https://hub.docker.com/r/oven/bun/tags
-FROM oven/bun:1 as base
+#FROM oven/bun:1 as base
+FROM --platform=$BUILDPLATFORM docker.io/library/node:current
+RUN npm install --global bun
 WORKDIR /usr/src/app
 
 # install dependencies into temp directory
