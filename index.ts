@@ -2,7 +2,7 @@ import { fetchNodes } from "./routes/nodes/route";
 import { fetchWeeklyWants } from "./routes/weekly-wants/route";
 
 console.log("Starting server");
-Bun.serve({
+const server = Bun.serve({
   fetch(req) {
     const url = new URL(req.url);
     if (url.pathname.startsWith("/nodes")) return fetchNodes(req);
@@ -17,5 +17,4 @@ Bun.serve({
     });
   },
 });
-
-console.log("Server is ready");
+console.log("Server started", server.id);
