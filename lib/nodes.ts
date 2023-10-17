@@ -33,6 +33,7 @@ export type Node = {
   y: number;
   z: number;
   mapName: string | null;
+  timestamp: number;
 };
 
 const mapBounds = {
@@ -101,6 +102,7 @@ export function toNode(actor: Actor): Node {
     y: actor.y,
     z: actor.z,
     mapName: getMapFromCoords({ x: actor.x, y: actor.y }),
+    timestamp: Date.now(),
   };
 }
 

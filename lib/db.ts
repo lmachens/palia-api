@@ -1,5 +1,5 @@
 import { Node } from "./nodes";
-import { CurrentGiftPreferences } from "./weekly-wants";
+import { WeeklyWants } from "./weekly-wants";
 
 let file = Bun.file(import.meta.dir + "/../db.json");
 if (!(await file.exists())) {
@@ -13,7 +13,7 @@ if (!(await file.exists())) {
 }
 export const db = (await file.json()) as {
   spawnNodes: Record<string, Node[]>;
-  weeklyWants?: CurrentGiftPreferences;
+  weeklyWants?: WeeklyWants;
 };
 
 export function getSpawnNodes() {
@@ -30,7 +30,7 @@ export function getWeeklyWants() {
   return db.weeklyWants;
 }
 
-export function updateWeeklyWants(weeklyWants: CurrentGiftPreferences) {
+export function updateWeeklyWants(weeklyWants: WeeklyWants) {
   if (db.weeklyWants) {
     if (
       db.weeklyWants.preferenceDataVersionNumber >=

@@ -1,5 +1,8 @@
 import { getWeeklyWants, updateWeeklyWants } from "../../lib/db";
-import { validateCurrentGiftPreferences } from "../../lib/weekly-wants";
+import {
+  toWeeklyWants,
+  validateCurrentGiftPreferences,
+} from "../../lib/weekly-wants";
 
 export async function fetchWeeklyWants(req: Request) {
   if (req.method === "POST") {
@@ -31,7 +34,8 @@ async function handlePOST(req: Request) {
         status: 400,
       });
     }
-    const updated = updateWeeklyWants(body);
+    const weeklyWants = toWeeklyWants(body);
+    const updated = updateWeeklyWants(weeklyWants);
     return new Response(updated ? "Updated" : "Not updated");
   } catch (e) {
     if (e instanceof SyntaxError) {

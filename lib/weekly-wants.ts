@@ -56,3 +56,24 @@ export const currentGiftPreferencesSchema: JSONSchemaType<CurrentGiftPreferences
 export const validateCurrentGiftPreferences = ajv.compile(
   currentGiftPreferencesSchema
 );
+
+export type WeeklyWants = {
+  preferenceResetTime: {
+    dayOfWeek: number;
+    hour: number;
+    minute: number;
+  };
+  preferenceDataVersionNumber: number;
+  currentPreferenceData: Array<{
+    villagerCoreId: number;
+    currentGiftPreferences: Array<number>;
+  }>;
+  timestamp: number;
+};
+
+export function toWeeklyWants(currentGiftPreferences: CurrentGiftPreferences): WeeklyWants {
+  return {
+   ...currentGiftPreferences,
+    timestamp: Date.now(),
+  };
+}
