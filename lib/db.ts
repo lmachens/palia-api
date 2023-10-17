@@ -6,6 +6,7 @@ console.log("DB file path:", filePath);
 let file = Bun.file(filePath);
 try {
   if (!(await file.exists())) {
+    console.log("DB file does not exist, creating it");
     await Bun.write(
       file,
       JSON.stringify({
@@ -17,6 +18,7 @@ try {
 } catch (e) {
   console.error(e);
 }
+console.log("DB file is ready");
 export const db = (await file.json()) as {
   spawnNodes: Record<string, Node[]>;
   weeklyWants?: WeeklyWants;
