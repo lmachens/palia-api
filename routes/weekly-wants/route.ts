@@ -11,20 +11,41 @@ export async function fetchWeeklyWants(req: Request) {
   if (req.method === "GET") {
     return handleGET(req);
   }
-  return new Response("Method not allowed", { status: 405 });
+  if (req.method === "OPTIONS") {
+    return new Response("", {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin:": "*",
+        Allow: "OPTIONS, GET, POST",
+      },
+    });
+  }
+  return new Response("Method not allowed", {
+    status: 405,
+    headers: { "Access-Control-Allow-Origin:": "*" },
+  });
 }
 
 async function handlePOST(req: Request) {
   if (req.method !== "POST") {
-    return new Response("Method not allowed", { status: 405 });
+    return new Response("Method not allowed", {
+      status: 405,
+      headers: { "Access-Control-Allow-Origin:": "*" },
+    });
   }
   if (req.headers.get("content-type") !== "application/json") {
-    return new Response("Bad request", { status: 400 });
+    return new Response("Bad request", {
+      status: 400,
+      headers: { "Access-Control-Allow-Origin:": "*" },
+    });
   }
   try {
     const body = await req.json();
     if (!body) {
-      return new Response("Bad request", { status: 400 });
+      return new Response("Bad request", {
+        status: 400,
+        headers: { "Access-Control-Allow-Origin:": "*" },
+      });
     }
     if (!validateCurrentGiftPreferences(body)) {
       const message = validateCurrentGiftPreferences
@@ -32,14 +53,20 @@ async function handlePOST(req: Request) {
         .join("\n");
       return new Response(`Invalid current gift preferences: ${message}`, {
         status: 400,
+        headers: { "Access-Control-Allow-Origin:": "*" },
       });
     }
     const weeklyWants = toWeeklyWants(body);
     const updated = updateWeeklyWants(weeklyWants);
-    return new Response(updated ? "Updated" : "Not updated");
+    return new Response(updated ? "Updated" : "Not updated", {
+      headers: { "Access-Control-Allow-Origin:": "*" },
+    });
   } catch (e) {
     if (e instanceof SyntaxError) {
-      return new Response("Bad request", { status: 400 });
+      return new Response("Bad request", {
+        status: 400,
+        headers: { "Access-Control-Allow-Origin:": "*" },
+      });
     }
     throw e;
   }
