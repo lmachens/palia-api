@@ -1,7 +1,10 @@
 import { Node } from "./nodes";
 import { WeeklyWants } from "./weekly-wants";
 
-let file = Bun.file(import.meta.dir + "/../db.json");
+const fileName =
+  process.env.NODE_ENV === "production" ? "db.json" : "db-dev.json";
+const filePath = import.meta.dir + `/../${fileName}`;
+let file = Bun.file(filePath);
 if (!(await file.exists())) {
   await Bun.write(
     file,
@@ -9,7 +12,7 @@ if (!(await file.exists())) {
       spawnNodes: {},
     })
   );
-  file = Bun.file(import.meta.dir + "/../db.json");
+  file = Bun.file(filePath);
 }
 export const db = (await file.json()) as {
   spawnNodes: Record<string, Node[]>;
