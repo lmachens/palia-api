@@ -17,7 +17,6 @@ export async function fetchNodes(req: Request) {
     return new Response("", {
       status: 204,
       headers: {
-        "Access-Control-Allow-Origin": "*",
         Allow: "OPTIONS, GET, POST",
       },
     });
