@@ -99,10 +99,12 @@ async function handlePOST(req: Request) {
           "BP_Garden",
           "BP_MainHouse",
           "BP_Master_",
+          "BP_Placeable_",
         ].some((i) => node.type.toLowerCase().startsWith(i.toLowerCase())) ||
         ["EquipView", "MirrorImage", "Arrow", "Glider"].some((i) =>
           node.type.toLowerCase().includes(i.toLowerCase())
-        )
+        ) ||
+        node.x === 0
       ) {
         return;
       }
