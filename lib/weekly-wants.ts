@@ -57,6 +57,16 @@ export const validateCurrentGiftPreferences = ajv.compile(
   currentGiftPreferencesSchema
 );
 
+export const isPlausibleCurrentGiftPreferences = (
+  currentGiftPreferences: CurrentGiftPreferences
+) => {
+  return !currentGiftPreferences.currentPreferenceData.some(
+    (item) =>
+      item.villagerCoreId === 0 ||
+      item.currentGiftPreferences.some((gift) => gift === 0)
+  );
+};
+
 export type WeeklyWants = {
   preferenceResetTime: {
     dayOfWeek: number;
@@ -71,9 +81,11 @@ export type WeeklyWants = {
   timestamp: number;
 };
 
-export function toWeeklyWants(currentGiftPreferences: CurrentGiftPreferences): WeeklyWants {
+export function toWeeklyWants(
+  currentGiftPreferences: CurrentGiftPreferences
+): WeeklyWants {
   return {
-   ...currentGiftPreferences,
+    ...currentGiftPreferences,
     timestamp: Date.now(),
   };
 }

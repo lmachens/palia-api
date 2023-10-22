@@ -1,5 +1,6 @@
 import { getWeeklyWants, updateWeeklyWants } from "../../lib/db";
 import {
+  isPlausibleCurrentGiftPreferences,
   toWeeklyWants,
   validateCurrentGiftPreferences,
 } from "../../lib/weekly-wants";
@@ -65,6 +66,15 @@ async function handlePOST(req: Request) {
         .errors!.map((error) => error.message)
         .join("\n");
       return new Response(`Invalid current gift preferences: ${message}`, {
+        status: 400,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Headers": "*",
+        },
+      });
+    }
+    if (!isPlausibleCurrentGiftPreferences(body)) {
+      return new Response(`Implausible current gift preferences`, {
         status: 400,
         headers: {
           "Access-Control-Allow-Origin": "*",
