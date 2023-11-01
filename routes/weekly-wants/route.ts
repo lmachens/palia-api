@@ -1,4 +1,5 @@
 import { getWeeklyWants, updateWeeklyWants } from "../../lib/db";
+import { isValidVersion } from "../../lib/version";
 import {
   isPlausibleCurrentGiftPreferences,
   toWeeklyWants,
@@ -41,7 +42,10 @@ async function handlePOST(req: Request) {
       },
     });
   }
-  if (req.headers.get("content-type") !== "application/json") {
+  if (
+    !isValidVersion(req.headers.get("app-version")) ||
+    req.headers.get("content-type") !== "application/json"
+  ) {
     return new Response("Bad request", {
       status: 400,
       headers: {
