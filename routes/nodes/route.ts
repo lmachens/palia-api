@@ -71,12 +71,12 @@ async function handlePOST(req: Request) {
 
     let count = 0;
     nodes.forEach((node) => {
-      if (!allGatherables.includes(node.type) || node.x === 0) {
+      const normalized = node.type.replace(/_C$/, "");
+      if (!allGatherables.includes(normalized) || node.x === 0) {
         return;
       }
-      const normalized = node.type.replace(/_C$/, "");
       const category =
-        Object.entries(gatherables).find(([k, v]) =>
+        Object.entries(gatherables).find(([, v]) =>
           v.some((b) => b.toLowerCase() === normalized.toLowerCase())
         )?.[0] ?? "other";
 
