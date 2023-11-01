@@ -119,7 +119,10 @@ export function getMinDistance(category: string) {
   return minDistance;
 }
 
-export function calculateDistance(node1: Node, coords: [number, number]) {
+export function calculateDistance(
+  node1: Node,
+  coords: [number, number, number]
+) {
   const dx = node1.x - coords[0];
   const dy = node1.y - coords[1];
   return Math.sqrt(dx * dx + dy * dy);

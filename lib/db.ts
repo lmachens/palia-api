@@ -6,7 +6,7 @@ export const db = {
 } as {
   spawnNodes: {
     [type: string]: {
-      [mapName: string]: [number, number][];
+      [mapName: string]: [number, number, number][];
     };
   };
   weeklyWants?: WeeklyWants;
@@ -23,7 +23,7 @@ export function insertNode(node: Node) {
   if (!db.spawnNodes[node.type][node.mapName]) {
     db.spawnNodes[node.type][node.mapName] = [];
   }
-  db.spawnNodes[node.type][node.mapName].push([node.x, node.y]);
+  db.spawnNodes[node.type][node.mapName].push([node.x, node.y, node.z]);
 }
 
 export function getWeeklyWants() {
