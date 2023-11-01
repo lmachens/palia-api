@@ -1,4 +1,5 @@
 import { getSpawnNodes, insertNode } from "../../lib/db";
+import { allGatherables, gatherables } from "../../lib/gatherables";
 import {
   calculateDistance,
   getMinDistance,
@@ -70,52 +71,24 @@ async function handlePOST(req: Request) {
 
     let count = 0;
     nodes.forEach((node) => {
-      if (
-        [
-          "DefaultPhysicsVolume",
-          "BP_EnvironmentManager",
-          "GameplayHUD",
-          "BP_HousingPlotUnlockDebrisActor",
-          "VAL_",
-          "LimitedEventManagerBase",
-          "BlueprintGeneratedClass",
-          "BP_LimitedEventManager",
-          "BP_Env_",
-          "BP_AudioPool_",
-          "BP_MajiMarket_",
-          "BP_Palcat_",
-          "BP_Bobber_",
-          "BP_QuestItem_",
-          "BP_Villager",
-          "BP_ValeriaPlayerController_",
-          "BP_ValeriaCharacter_",
-          "BP_ValeriaGameState_",
-          "BP_vfx",
-          "BP_Decor_",
-          "BP_BackpackUpgrade",
-          "BP_Axe_",
-          "BP_Dummy",
-          "BP_CharacterPreview",
-          "BP_Garden",
-          "BP_MainHouse",
-          "BP_Master_",
-          "BP_Placeable_",
-        ].some((i) => node.type.toLowerCase().startsWith(i.toLowerCase())) ||
-        ["EquipView", "MirrorImage", "Arrow", "Glider"].some((i) =>
-          node.type.toLowerCase().includes(i.toLowerCase())
-        ) ||
-        node.x === 0
-      ) {
+      if (!allGatherables.includes(node.type) || node.x === 0) {
         return;
       }
+      const normalized = node.type.replace(/_C$/, "");
+      const category =
+        Object.entries(gatherables).find(([k, v]) =>
+          v.some((b) => b.toLowerCase() === normalized.toLowerCase())
+        )?.[0] ?? "other";
 
       const spawnNodes = getSpawnNodes();
       if (spawnNodes[node.type]) {
-        const isTooClose = spawnNodes[node.type].some((spawnNode) => {
-          const distance = calculateDistance(node, spawnNode);
-          const minDistance = getMinDistance(node.type);
-          return distance < minDistance;
-        });
+        const isTooClose = spawnNodes[node.type]?.[node.mapName]?.some(
+          (coords) => {
+            const distance = calculateDistance(node, coords);
+            const minDistance = getMinDistance(category);
+            return distance < minDistance;
+          }
+        );
         if (isTooClose) {
           return;
         }

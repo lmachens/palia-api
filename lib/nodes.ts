@@ -32,10 +32,14 @@ export type Node = {
   x: number;
   y: number;
   z: number;
-  mapName: string | null;
+  mapName: string;
   timestamp: number;
 };
 
+/*
+housing / bahari bay muss angepasst werden, siehe mapName
+{"type":"BP_HousingPlotUnlockDebrisActor_C","x":265200,"y":-87600,"z":5000,"mapName":"housing","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":265200,"y":-86300,"z":5000,"mapName":"housing","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":265200,"y":-85000,"z":5000,"mapName":"housing","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":265200,"y":-83700,"z":5000,"mapName":"housing","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":265200,"y":-82400,"z":5000,"mapName":"housing","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":189800,"y":-87600,"z":5000,"mapName":"bahari-bay","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":189800,"y":-86300,"z":5000,"mapName":"bahari-bay","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":189800,"y":-85000,"z":5000,"mapName":"bahari-bay","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":189800,"y":-83700,"z":5000,"mapName":"bahari-bay","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":189800,"y":-82400,"z":5000,"mapName":"bahari-bay","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":191100,"y":-87600,"z":5000,"mapName":"bahari-bay","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":191100,"y":-86300,"z":5000,"mapName":"bahari-bay","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":191100,"y":-85000,"z":5000,"mapName":"bahari-bay","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":191100,"y":-83700,"z":5000,"mapName":"bahari-bay","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":191100,"y":-82400,"z":5000,"mapName":"bahari-bay","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":192400,"y":-87600,"z":5000,"mapName":"housing","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":192400,"y":-86300,"z":5000,"mapName":"housing","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":192400,"y":-85000,"z":5000,"mapName":"housing","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":192400,"y":-83700,"z":5000,"mapName":"housing","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":192400,"y":-82400,"z":5000,"mapName":"housing","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":193700,"y":-87600,"z":5000,"mapName":"housing","timestamp":1697573646290},
+ */
 const mapBounds = {
   fairgrounds: {
     topLeft: {
@@ -91,7 +95,7 @@ export function getMapFromCoords(coords: { x: number; y: number }) {
       return mapName;
     }
   }
-  return null; // Coordinates do not belong to any known map
+  return "unknown";
 }
 
 export function toNode(actor: Actor): Node {
@@ -106,17 +110,17 @@ export function toNode(actor: Actor): Node {
   };
 }
 
-export const MIN_DISTANCE_MOVING = 1500;
-export const MIN_DISTANCE = 100;
+export function getMinDistance(category: string) {
+  let minDistance = 200;
+  if (["bugCatching", "hunting"].includes(category)) {
+    minDistance = Math.max(minDistance, 3000);
+  }
 
-export function getMinDistance(group: string) {
-  return ["insects", "hunting"].includes(group)
-    ? MIN_DISTANCE_MOVING
-    : MIN_DISTANCE;
+  return minDistance;
 }
 
-export function calculateDistance(node1: Node, node2: Node) {
-  const dx = node1.x - node2.x;
-  const dy = node1.y - node2.y;
+export function calculateDistance(node1: Node, coords: [number, number]) {
+  const dx = node1.x - coords[0];
+  const dy = node1.y - coords[1];
   return Math.sqrt(dx * dx + dy * dy);
 }
