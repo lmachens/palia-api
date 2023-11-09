@@ -61,9 +61,10 @@ export const isPlausibleCurrentGiftPreferences = (
   currentGiftPreferences: CurrentGiftPreferences
 ) => {
   return !currentGiftPreferences.currentPreferenceData.some(
-    (item) =>
-      item.villagerCoreId === 0 ||
-      item.currentGiftPreferences.some((gift) => gift === 0)
+    (item, index) =>
+      index < 23 &&
+      (item.villagerCoreId === 0 ||
+        item.currentGiftPreferences.some((gift) => gift === 0))
   );
 };
 
