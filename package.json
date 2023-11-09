@@ -7,8 +7,8 @@
     "start": "bun run index.ts"
   },
   "devDependencies": {
-    "@types/semver": "^7.5.4",
-    "bun-types": "^1.0.6"
+    "@types/semver": "^7.5.5",
+    "bun-types": "^1.0.11"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"

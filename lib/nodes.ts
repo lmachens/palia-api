@@ -15,6 +15,8 @@ export const actorsSchema: JSONSchemaType<Actor[]> = {
     type: "object",
     properties: {
       className: { type: "string" },
+      guid: { type: "string", nullable: true },
+      name: { type: "string", nullable: true },
       x: { type: "number" },
       y: { type: "number" },
       z: { type: "number" },

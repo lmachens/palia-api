@@ -1,4 +1,13 @@
-import { getSpawnNodes, insertNode } from "../../lib/db";
+import {
+  getPlayers,
+  getSpawnNodes,
+  getTimedLootPiles,
+  getVillagers,
+  insertNode,
+  updatePlayer,
+  updateTimedLootPile,
+  updateVillager,
+} from "../../lib/db";
 import { allGatherables, gatherables } from "../../lib/gatherables";
 import {
   calculateDistance,
@@ -76,6 +85,18 @@ async function handlePOST(req: Request) {
     let count = 0;
     nodes.forEach((node) => {
       const normalized = node.type.replace(/_C$/, "");
+      if (normalized.startsWith("BP_ValeriaCharacter")) {
+        updatePlayer(node);
+        return;
+      }
+      if (normalized.startsWith("BP_Villager")) {
+        updateVillager(node);
+        return;
+      }
+      if (normalized.startsWith("BP_ChapaaPile")) {
+        updateTimedLootPile(node);
+        return;
+      }
       if (!allGatherables.includes(normalized) || node.x === 0) {
         return;
       }
@@ -121,9 +142,33 @@ async function handlePOST(req: Request) {
   }
 }
 
-async function handleGET(_req: Request) {
-  const spawnNodes = getSpawnNodes();
-  return new Response(JSON.stringify(spawnNodes), {
+async function handleGET(req: Request) {
+  const query = new URL(req.url).searchParams;
+  const type = query.get("type");
+  let result;
+  switch (type) {
+    case "spawnNodes":
+      result = getSpawnNodes();
+      break;
+    case "timedLootPiles":
+      result = getTimedLootPiles();
+      break;
+    case "players":
+      result = getPlayers();
+      break;
+    case "villagers":
+      result = getVillagers();
+      break;
+    default:
+      return new Response("Bad request", {
+        status: 400,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Headers": "*",
+        },
+      });
+  }
+  return new Response(JSON.stringify(result), {
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Headers": "*",

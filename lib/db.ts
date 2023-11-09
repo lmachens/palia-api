@@ -2,8 +2,32 @@ import { Node } from "./nodes";
 import { WeeklyWants } from "./weekly-wants";
 
 export const db = {
+  timedLootPiles: {},
+  villagers: {},
+  players: {},
   spawnNodes: {},
 } as {
+  timedLootPiles: {
+    [type: string]: {
+      mapName: string;
+      position: [number, number, number];
+      timestamp: number;
+    };
+  };
+  villagers: {
+    [type: string]: {
+      mapName: string;
+      position: [number, number, number];
+      timestamp: number;
+    };
+  };
+  players: {
+    [type: string]: {
+      mapName: string;
+      position: [number, number, number];
+      timestamp: number;
+    };
+  };
   spawnNodes: {
     [type: string]: {
       [mapName: string]: [number, number, number][];
@@ -11,6 +35,42 @@ export const db = {
   };
   weeklyWants?: WeeklyWants;
 };
+
+export function getTimedLootPiles() {
+  return db.timedLootPiles;
+}
+
+export function updateTimedLootPile(node: Node) {
+  db.timedLootPiles[node.type] = {
+    mapName: node.mapName,
+    position: [node.x, node.y, node.z],
+    timestamp: Date.now(),
+  };
+}
+
+export function getVillagers() {
+  return db.villagers;
+}
+
+export function updateVillager(node: Node) {
+  db.villagers[node.type] = {
+    mapName: node.mapName,
+    position: [node.x, node.y, node.z],
+    timestamp: Date.now(),
+  };
+}
+
+export function getPlayers() {
+  return db.players;
+}
+
+export function updatePlayer(node: Node) {
+  db.players[node.type] = {
+    mapName: node.mapName,
+    position: [node.x, node.y, node.z],
+    timestamp: Date.now(),
+  };
+}
 
 export function getSpawnNodes() {
   return db.spawnNodes;

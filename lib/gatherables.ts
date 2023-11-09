@@ -1,4 +1,5 @@
 export const gatherables = {
+  timedLootPiles: ["BP_ChapaaPile"],
   hotspots: [
     "BP_WaterPlane_Fishing_AZ1_Cave_SQ",
     "BP_WaterPlane_Fishing_LakeVillage_SQ",
@@ -225,6 +226,9 @@ export const gatherables = {
     "BP_ValeriaHuntingCreature_SlimeHazard",
     "BP_ValeriaHuntingCreature_SlimeSplash",
     "BP_ValeriaHuntingCreature_SlimeSplat",
+    "BP_ValeriaHuntingCreature_SlimeTrail_T1",
+    "BP_ValeriaHuntingCreature_SlimeTrail_T2",
+    "BP_ValeriaHuntingCreature_SlimeTrail_T3",
     "BP_ValeriaHuntingCreature_Cearnuk_T1",
     "BP_ValeriaHuntingCreature_Cearnuk_T2",
     "BP_ValeriaHuntingCreature_Cearnuk_T3",
