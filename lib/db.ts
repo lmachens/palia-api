@@ -22,7 +22,8 @@ export const db = {
     };
   };
   players: {
-    [type: string]: {
+    [guid: string]: {
+      name: string;
       mapName: string;
       position: [number, number, number];
       timestamp: number;
@@ -65,7 +66,8 @@ export function getPlayers() {
 }
 
 export function updatePlayer(node: Node) {
-  db.players[node.type] = {
+  db.players[node.guid!] = {
+    name: node.name!,
     mapName: node.mapName,
     position: [node.x, node.y, node.z],
     timestamp: Date.now(),

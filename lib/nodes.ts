@@ -7,6 +7,8 @@ export type Actor = {
   y: number;
   z: number;
   r: number;
+  name?: string;
+  guid?: string;
 };
 
 export const actorsSchema: JSONSchemaType<Actor[]> = {
@@ -15,12 +17,12 @@ export const actorsSchema: JSONSchemaType<Actor[]> = {
     type: "object",
     properties: {
       className: { type: "string" },
-      guid: { type: "string", nullable: true },
-      name: { type: "string", nullable: true },
       x: { type: "number" },
       y: { type: "number" },
       z: { type: "number" },
       r: { type: "number" },
+      guid: { type: "string", nullable: true },
+      name: { type: "string", nullable: true },
     },
     required: ["className", "x", "y", "z", "r"],
     additionalProperties: false,
@@ -36,6 +38,8 @@ export type Node = {
   z: number;
   mapName: string;
   timestamp: number;
+  name?: string;
+  guid?: string;
 };
 
 /*
@@ -66,6 +70,8 @@ export function toNode(actor: Actor): Node {
     z: actor.z,
     mapName: getMapFromActor(actor),
     timestamp: Date.now(),
+    guid: actor.guid,
+    name: actor.name,
   };
 }
 
