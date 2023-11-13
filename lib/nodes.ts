@@ -35,7 +35,7 @@ export const actorsSchema: JSONSchemaType<Actor[]> = {
       x: { type: "number" },
       y: { type: "number" },
       z: { type: "number" },
-      r: { type: "number" },
+      r: { type: "number", nullable: true },
       guid: { type: "string", nullable: true },
       name: { type: "string", nullable: true },
       giftHistory: {
@@ -73,7 +73,7 @@ export const actorsSchema: JSONSchemaType<Actor[]> = {
         },
       },
     },
-    required: ["className", "x", "y", "z", "r"],
+    required: ["className", "x", "y", "z"],
     additionalProperties: false,
   },
 };
