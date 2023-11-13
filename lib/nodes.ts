@@ -9,6 +9,21 @@ export type Actor = {
   r: number;
   name?: string;
   guid?: string;
+  giftHistory?: VillagerGiftHistory[];
+  skillLevels?: SkillLevels[];
+};
+
+export type VillagerGiftHistory = {
+  villagerCoreId: number;
+  itemPersistId: number;
+  lastGiftedMs: number;
+  associatedPreferenceVersion: number;
+};
+
+export type SkillLevels = {
+  type: string;
+  level: number;
+  xpGainedThisLevel: number;
 };
 
 export const actorsSchema: JSONSchemaType<Actor[]> = {
@@ -23,6 +38,40 @@ export const actorsSchema: JSONSchemaType<Actor[]> = {
       r: { type: "number" },
       guid: { type: "string", nullable: true },
       name: { type: "string", nullable: true },
+      giftHistory: {
+        type: "array",
+        nullable: true,
+        items: {
+          type: "object",
+          properties: {
+            villagerCoreId: { type: "number" },
+            itemPersistId: { type: "number" },
+            lastGiftedMs: { type: "number" },
+            associatedPreferenceVersion: { type: "number" },
+          },
+          required: [
+            "villagerCoreId",
+            "itemPersistId",
+            "lastGiftedMs",
+            "associatedPreferenceVersion",
+          ],
+          additionalProperties: false,
+        },
+      },
+      skillLevels: {
+        type: "array",
+        nullable: true,
+        items: {
+          type: "object",
+          properties: {
+            type: { type: "string" },
+            level: { type: "number" },
+            xpGainedThisLevel: { type: "number" },
+          },
+          required: ["type", "level", "xpGainedThisLevel"],
+          additionalProperties: false,
+        },
+      },
     },
     required: ["className", "x", "y", "z", "r"],
     additionalProperties: false,
@@ -40,6 +89,8 @@ export type Node = {
   timestamp: number;
   name?: string;
   guid?: string;
+  giftHistory?: VillagerGiftHistory[];
+  skillLevels?: SkillLevels[];
 };
 
 /*
@@ -72,6 +123,8 @@ export function toNode(actor: Actor): Node {
     timestamp: Date.now(),
     guid: actor.guid,
     name: actor.name,
+    giftHistory: actor.giftHistory,
+    skillLevels: actor.skillLevels,
   };
 }
 

@@ -1,4 +1,4 @@
-import { Node } from "./nodes";
+import { Node, SkillLevels, VillagerGiftHistory } from "./nodes";
 import { WeeklyWants } from "./weekly-wants";
 
 export const db = {
@@ -24,6 +24,8 @@ export const db = {
   players: {
     [guid: string]: {
       name: string;
+      giftHistory?: VillagerGiftHistory[];
+      skillLevels?: SkillLevels[];
       mapName: string;
       position: [number, number, number];
       timestamp: number;
@@ -68,6 +70,8 @@ export function getPlayers() {
 export function updatePlayer(node: Node) {
   db.players[node.guid!] = {
     name: node.name!,
+    giftHistory: node.giftHistory!,
+    skillLevels: node.skillLevels!,
     mapName: node.mapName,
     position: [node.x, node.y, node.z],
     timestamp: Date.now(),
