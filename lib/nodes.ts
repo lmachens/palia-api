@@ -6,7 +6,7 @@ export type Actor = {
   x: number;
   y: number;
   z: number;
-  r: number;
+  r?: number;
   name?: string;
   guid?: string;
   giftHistory?: VillagerGiftHistory[];

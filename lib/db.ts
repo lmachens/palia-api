@@ -68,6 +68,9 @@ export function getPlayers() {
 }
 
 export function updatePlayer(node: Node) {
+  if (!node.skillLevels || node.skillLevels.length === 0) {
+    return;
+  }
   db.players[node.guid!] = {
     name: node.name!,
     giftHistory: node.giftHistory!,
