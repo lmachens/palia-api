@@ -65,8 +65,8 @@ export const actorsSchema: JSONSchemaType<Actor[]> = {
           type: "object",
           properties: {
             type: { type: "string" },
-            level: { type: "number" },
-            xpGainedThisLevel: { type: "number" },
+            level: { type: "number", minimum: 1 },
+            xpGainedThisLevel: { type: "number", minimum: 0 },
           },
           required: ["type", "level", "xpGainedThisLevel"],
           additionalProperties: false,
