@@ -8,7 +8,7 @@ try {
   if (!(await file.exists())) {
     console.log("DB file does not exist, creating it");
     await Bun.write(
-      file,
+      filePath,
       JSON.stringify({
         timedLootPiles: {},
         villagers: {},
