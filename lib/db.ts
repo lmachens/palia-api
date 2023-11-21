@@ -1,12 +1,28 @@
 import { Node, SkillLevels, VillagerGiftHistory } from "./nodes";
 import { WeeklyWants } from "./weekly-wants";
 
-export const db = {
-  timedLootPiles: {},
-  villagers: {},
-  players: {},
-  spawnNodes: {},
-} as {
+const filePath = Bun.main.replace("index.ts", "db.json");
+console.log("DB file path:", filePath);
+let file = Bun.file(filePath);
+try {
+  if (!(await file.exists())) {
+    console.log("DB file does not exist, creating it");
+    await Bun.write(
+      file,
+      JSON.stringify({
+        timedLootPiles: {},
+        villagers: {},
+        players: {},
+        spawnNodes: {},
+      })
+    );
+    file = Bun.file(filePath);
+  }
+} catch (e) {
+  console.error(e);
+}
+
+type Database = {
   timedLootPiles: {
     [type: string]: {
       mapName: string;
@@ -38,6 +54,19 @@ export const db = {
   };
   weeklyWants?: WeeklyWants;
 };
+export const db: Database = await file.json();
+console.log("DB file is ready");
+
+const DEBOUNCE_TIME = 10000;
+let timeout: Timer | null = null;
+function debounceWrite() {
+  if (timeout) {
+    clearTimeout(timeout);
+  }
+  timeout = setTimeout(async () => {
+    await Bun.write(file, JSON.stringify(db));
+  }, DEBOUNCE_TIME);
+}
 
 export function getTimedLootPiles() {
   return db.timedLootPiles;
@@ -49,6 +78,7 @@ export function updateTimedLootPile(node: Node) {
     position: [node.x, node.y, node.z],
     timestamp: Date.now(),
   };
+  debounceWrite();
 }
 
 export function getVillagers() {
@@ -61,10 +91,23 @@ export function updateVillager(node: Node) {
     position: [node.x, node.y, node.z],
     timestamp: Date.now(),
   };
+  debounceWrite();
 }
 
 export function getPlayers() {
-  return db.players;
+  const players: {
+    [guid: string]: {
+      name: string;
+      skillLevels?: SkillLevels[];
+    };
+  } = {};
+  Object.entries(db.players).forEach(([guid, player]) => {
+    players[guid] = {
+      name: player.name,
+      skillLevels: player.skillLevels,
+    };
+  });
+  return players;
 }
 
 export function updatePlayer(node: Node) {
@@ -79,6 +122,7 @@ export function updatePlayer(node: Node) {
     position: [node.x, node.y, node.z],
     timestamp: Date.now(),
   };
+  debounceWrite();
 }
 
 export function getSpawnNodes() {
@@ -93,6 +137,7 @@ export function insertNode(node: Node) {
     db.spawnNodes[node.type][node.mapName] = [];
   }
   db.spawnNodes[node.type][node.mapName].push([node.x, node.y, node.z]);
+  debounceWrite();
 }
 
 export function getWeeklyWants() {
@@ -109,5 +154,6 @@ export function updateWeeklyWants(weeklyWants: WeeklyWants) {
     }
   }
   db.weeklyWants = weeklyWants;
+  debounceWrite();
   return true;
 }
