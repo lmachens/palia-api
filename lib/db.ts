@@ -1,26 +1,22 @@
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { Node, SkillLevels, VillagerGiftHistory } from "./nodes";
 import { WeeklyWants } from "./weekly-wants";
 
 const filePath = Bun.main.replace("index.ts", "db.json");
 console.log("DB file path:", filePath);
-let file = Bun.file(filePath);
-try {
-  if (!(await file.exists())) {
-    console.log("DB file does not exist, creating it");
-    await Bun.write(
-      filePath,
-      JSON.stringify({
-        timedLootPiles: {},
-        villagers: {},
-        players: {},
-        spawnNodes: {},
-      })
-    );
-    file = Bun.file(filePath);
-  }
-} catch (e) {
-  console.error(e);
+if (!existsSync(filePath)) {
+  console.log("DB file does not exist, creating it");
+  writeFileSync(
+    filePath,
+    JSON.stringify({
+      timedLootPiles: {},
+      villagers: {},
+      players: {},
+      spawnNodes: {},
+    })
+  );
 }
+const file = readFileSync(filePath, "utf8");
 
 type Database = {
   timedLootPiles: {
@@ -54,7 +50,8 @@ type Database = {
   };
   weeklyWants?: WeeklyWants;
 };
-export const db: Database = await file.json();
+
+export const db: Database = JSON.parse(file);
 console.log("DB file is ready");
 
 const DEBOUNCE_TIME = 10000;
