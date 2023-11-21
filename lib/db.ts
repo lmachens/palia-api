@@ -61,7 +61,7 @@ function debounceWrite() {
     clearTimeout(timeout);
   }
   timeout = setTimeout(async () => {
-    await Bun.write(file, JSON.stringify(db));
+    writeFileSync(filePath, JSON.stringify(db));
   }, DEBOUNCE_TIME);
 }
 
