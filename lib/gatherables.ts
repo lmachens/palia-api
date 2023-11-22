@@ -83,6 +83,7 @@ export const gatherables = {
     "BP_Bug_PedeR2",
     "BP_Bug_PedeU+",
     "BP_Bug_PedeU",
+    "BP_Bug_AncientFlowbug",
     "BP_Bug_SnailR+",
     "BP_Bug_SnailR",
     "BP_Bug_SnailU+",
@@ -175,6 +176,7 @@ export const gatherables = {
     "BP_Trash_Shipfragments",
     "BP_Trash_Wagonwheel",
     "BP_Trash_WaterloggedBoot",
+    "BP_Fish_Cloudminnow",
   ],
   foraging: [
     "BP_Gatherable_MushroomBlue+",
