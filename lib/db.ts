@@ -54,15 +54,26 @@ type Database = {
 export const db: Database = JSON.parse(file);
 console.log("DB file is ready");
 
-const DEBOUNCE_TIME = 10000;
+const THROTTLE_TIME = 30000;
 let timeout: Timer | null = null;
-function debounceWrite() {
-  if (timeout) {
-    clearTimeout(timeout);
+let lastWrite = Date.now();
+let blocked = false;
+function throttleWrite() {
+  const timeGone = Date.now() - lastWrite;
+  if (timeGone < THROTTLE_TIME) {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(throttleWrite, THROTTLE_TIME - timeGone);
+    return;
   }
-  timeout = setTimeout(async () => {
-    writeFileSync(filePath, JSON.stringify(db));
-  }, DEBOUNCE_TIME);
+  if (blocked) {
+    return;
+  }
+  blocked = true;
+  lastWrite = Date.now();
+  writeFileSync(filePath, JSON.stringify(db));
+  blocked = false;
 }
 
 export function getTimedLootPiles() {
@@ -75,7 +86,7 @@ export function updateTimedLootPile(node: Node) {
     position: [node.x, node.y, node.z],
     timestamp: Date.now(),
   };
-  debounceWrite();
+  throttleWrite();
 }
 
 export function getVillagers() {
@@ -88,7 +99,7 @@ export function updateVillager(node: Node) {
     position: [node.x, node.y, node.z],
     timestamp: Date.now(),
   };
-  debounceWrite();
+  throttleWrite();
 }
 
 export function getPlayers() {
@@ -119,7 +130,7 @@ export function updatePlayer(node: Node) {
     position: [node.x, node.y, node.z],
     timestamp: Date.now(),
   };
-  debounceWrite();
+  throttleWrite();
 }
 
 export function getSpawnNodes() {
@@ -134,7 +145,7 @@ export function insertNode(node: Node) {
     db.spawnNodes[node.type][node.mapName] = [];
   }
   db.spawnNodes[node.type][node.mapName].push([node.x, node.y, node.z]);
-  debounceWrite();
+  throttleWrite();
 }
 
 export function getWeeklyWants() {
@@ -151,6 +162,6 @@ export function updateWeeklyWants(weeklyWants: WeeklyWants) {
     }
   }
   db.weeklyWants = weeklyWants;
-  debounceWrite();
+  throttleWrite();
   return true;
 }
