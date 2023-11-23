@@ -81,6 +81,15 @@ export function getTimedLootPiles() {
 }
 
 export function updateTimedLootPile(node: Node) {
+  if (
+    db.timedLootPiles[node.type] &&
+    db.timedLootPiles[node.type].mapName === node.mapName &&
+    db.timedLootPiles[node.type].position[0] === node.x &&
+    db.timedLootPiles[node.type].position[1] === node.y &&
+    db.timedLootPiles[node.type].position[2] === node.z
+  ) {
+    return;
+  }
   db.timedLootPiles[node.type] = {
     mapName: node.mapName,
     position: [node.x, node.y, node.z],
