@@ -95,7 +95,6 @@ async function handlePOST(req: Request) {
       }
       if (normalized.startsWith("BP_ChapaaPile")) {
         updateTimedLootPile(node);
-        return;
       }
       if (!allGatherables.includes(normalized) || node.x === 0) {
         return;
