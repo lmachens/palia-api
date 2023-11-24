@@ -51,7 +51,17 @@ type Database = {
   weeklyWants?: WeeklyWants;
 };
 
-export const db: Database = JSON.parse(file);
+export let db: Database;
+try {
+  db = JSON.parse(file);
+} catch (err) {
+  db = {
+    timedLootPiles: {},
+    villagers: {},
+    players: {},
+    spawnNodes: {},
+  };
+}
 console.log("DB file is ready");
 
 const THROTTLE_TIME = 30000;
