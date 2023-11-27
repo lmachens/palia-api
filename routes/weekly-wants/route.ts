@@ -1,8 +1,10 @@
-import { getWeeklyWants, updateWeeklyWants } from "../../lib/db";
 import { isValidVersion } from "../../lib/version";
+import { villagers } from "../../lib/villagers";
 import {
+  getWeeklyWants,
   isPlausibleCurrentGiftPreferences,
   toWeeklyWants,
+  updateWeeklyWants,
   validateCurrentGiftPreferences,
 } from "../../lib/weekly-wants";
 
@@ -110,7 +112,30 @@ async function handlePOST(req: Request) {
 
 async function handleGET(_req: Request) {
   const weeklyWants = getWeeklyWants();
-  return new Response(JSON.stringify(weeklyWants), {
+  if (!weeklyWants) {
+    return new Response("Not found", { status: 404 });
+  }
+  const preferences = weeklyWants.currentPreferenceData.reduce((acc, curr) => {
+    const villager = villagers.find(
+      (villager) => villager.persistId === curr.villagerCoreId
+    );
+    if (!villager) {
+      return acc;
+    }
+    const gifts = curr.currentGiftPreferences.map((giftId) =>
+      villager?.gifts.find((gift) => gift.persistId === giftId)
+    );
+    acc[villager?.configId] = gifts;
+    return acc;
+  }, {} as Record<string, any>);
+
+  const result = {
+    version: weeklyWants.preferenceDataVersionNumber,
+    timestamp: weeklyWants.timestamp,
+    preferences,
+  };
+
+  return new Response(JSON.stringify(result), {
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Headers": "*",

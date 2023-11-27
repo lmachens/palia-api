@@ -1,3 +1,28 @@
+import { getDB } from "./db";
+import { Node } from "./nodes";
+
+type SpawnNodes = {
+  [type: string]: {
+    [mapName: string]: [number, number, number][];
+  };
+};
+const [db, write] = getDB<SpawnNodes>("spawn-nodes", {}, 30000);
+
+export function getSpawnNodes() {
+  return db;
+}
+
+export function insertNode(node: Node) {
+  if (!db[node.type]) {
+    db[node.type] = {};
+  }
+  if (!db[node.type][node.mapName]) {
+    db[node.type][node.mapName] = [];
+  }
+  db[node.type][node.mapName].push([node.x, node.y, node.z]);
+  write();
+}
+
 export const gatherables = {
   timedLootPiles: ["BP_ChapaaPile"],
   hotspots: [

@@ -1,4 +1,35 @@
 import Ajv, { JSONSchemaType } from "ajv";
+import { getDB } from "./db";
+
+const [db, write] = getDB<WeeklyWants>(
+  "weekly-wants",
+  {
+    preferenceDataVersionNumber: 0,
+    preferenceResetTime: {
+      dayOfWeek: 0,
+      hour: 0,
+      minute: 0,
+    },
+    currentPreferenceData: [],
+    timestamp: 0,
+  },
+  1
+);
+
+export function getWeeklyWants() {
+  return db;
+}
+
+export function updateWeeklyWants(weeklyWants: WeeklyWants) {
+  if (
+    db.preferenceDataVersionNumber >= weeklyWants.preferenceDataVersionNumber
+  ) {
+    return false;
+  }
+  Object.assign(db, weeklyWants);
+  write();
+  return true;
+}
 
 const ajv = new Ajv();
 export type CurrentGiftPreferences = {
