@@ -7,6 +7,7 @@ import {
 import {
   calculateDistance,
   getMinDistance,
+  modHousingCoords,
   toNode,
   validateActors,
 } from "../../lib/nodes";
@@ -85,6 +86,13 @@ async function handlePOST(req: Request) {
 
     let count = 0;
     nodes.forEach((node) => {
+      if (node.mapName === "housing") {
+        const position = modHousingCoords(node);
+        node.x = position.x;
+        node.y = position.y;
+        node.z = position.z;
+      }
+
       const normalized = node.type.replace(/_C$/, "");
       if (normalized.startsWith("BP_ValeriaCharacter")) {
         updatePlayer(node);

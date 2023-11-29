@@ -93,10 +93,18 @@ export type Node = {
   skillLevels?: SkillLevels[];
 };
 
-/*
-housing / bahari bay muss angepasst werden, siehe mapName
-{"type":"BP_HousingPlotUnlockDebrisActor_C","x":265200,"y":-87600,"z":5000,"mapName":"housing","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":265200,"y":-86300,"z":5000,"mapName":"housing","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":265200,"y":-85000,"z":5000,"mapName":"housing","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":265200,"y":-83700,"z":5000,"mapName":"housing","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":265200,"y":-82400,"z":5000,"mapName":"housing","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":189800,"y":-87600,"z":5000,"mapName":"bahari-bay","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":189800,"y":-86300,"z":5000,"mapName":"bahari-bay","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":189800,"y":-85000,"z":5000,"mapName":"bahari-bay","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":189800,"y":-83700,"z":5000,"mapName":"bahari-bay","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":189800,"y":-82400,"z":5000,"mapName":"bahari-bay","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":191100,"y":-87600,"z":5000,"mapName":"bahari-bay","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":191100,"y":-86300,"z":5000,"mapName":"bahari-bay","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":191100,"y":-85000,"z":5000,"mapName":"bahari-bay","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":191100,"y":-83700,"z":5000,"mapName":"bahari-bay","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":191100,"y":-82400,"z":5000,"mapName":"bahari-bay","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":192400,"y":-87600,"z":5000,"mapName":"housing","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":192400,"y":-86300,"z":5000,"mapName":"housing","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":192400,"y":-85000,"z":5000,"mapName":"housing","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":192400,"y":-83700,"z":5000,"mapName":"housing","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":192400,"y":-82400,"z":5000,"mapName":"housing","timestamp":1697573646290},{"type":"BP_HousingPlotUnlockDebrisActor_C","x":193700,"y":-87600,"z":5000,"mapName":"housing","timestamp":1697573646290},
- */
+const HOUSING_MOD = 65000;
+export function modHousingCoords(coords: { x: number; y: number; z: number }) {
+  let x = coords.x % HOUSING_MOD;
+  if (x < 0) {
+    x += HOUSING_MOD;
+  }
+  let y = coords.y % HOUSING_MOD;
+  if (y < 0) {
+    y += HOUSING_MOD;
+  }
+  return { x, y, z: coords.z };
+}
 
 export function getMapFromActor(actor: Actor) {
   if (actor.className.includes("Maps/Village")) {
