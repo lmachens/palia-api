@@ -4,6 +4,7 @@ import { Node, SkillLevels } from "./nodes";
 type Players = {
   [guid: string]: {
     name: string;
+    lastKnownPrimaryHousingPlotValue?: number;
     skillLevels?: SkillLevels[];
     mapName: string;
     position: [number, number, number];
@@ -35,6 +36,7 @@ export function updatePlayer(node: Node) {
   }
   db[node.guid!] = {
     name: node.name!,
+    lastKnownPrimaryHousingPlotValue: node.lastKnownPrimaryHousingPlotValue,
     skillLevels: node.skillLevels!,
     mapName: node.mapName,
     position: [node.x, node.y, node.z],

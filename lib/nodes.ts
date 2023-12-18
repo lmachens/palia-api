@@ -12,6 +12,7 @@ export type Actor = {
   guid?: string;
   giftHistory?: VillagerGiftHistory[];
   skillLevels?: SkillLevels[];
+  lastKnownPrimaryHousingPlotValue?: number;
 };
 
 export type VillagerGiftHistory = {
@@ -74,6 +75,10 @@ export const actorsSchema: JSONSchemaType<Actor[]> = {
           additionalProperties: false,
         },
       },
+      lastKnownPrimaryHousingPlotValue: {
+        type: "number",
+        nullable: true,
+      },
     },
     required: ["type", "mapName", "x", "y", "z"],
     additionalProperties: false,
@@ -93,6 +98,7 @@ export type Node = {
   guid?: string;
   giftHistory?: VillagerGiftHistory[];
   skillLevels?: SkillLevels[];
+  lastKnownPrimaryHousingPlotValue?: number;
 };
 
 const HOUSING_MOD = 65000;
