@@ -1,6 +1,6 @@
 import semver from "semver";
 
-const MINIMUM_VERSION = "0.19.0";
+const MINIMUM_VERSION = "1.2.4";
 
 export function isValidVersion(version?: string | null) {
   return (

@@ -2,7 +2,8 @@ import Ajv, { JSONSchemaType } from "ajv";
 
 const ajv = new Ajv();
 export type Actor = {
-  className: string;
+  type: string;
+  mapName: string;
   x: number;
   y: number;
   z: number;
@@ -31,7 +32,8 @@ export const actorsSchema: JSONSchemaType<Actor[]> = {
   items: {
     type: "object",
     properties: {
-      className: { type: "string" },
+      type: { type: "string" },
+      mapName: { type: "string" },
       x: { type: "number" },
       y: { type: "number" },
       z: { type: "number" },
@@ -73,7 +75,7 @@ export const actorsSchema: JSONSchemaType<Actor[]> = {
         },
       },
     },
-    required: ["className", "x", "y", "z"],
+    required: ["type", "mapName", "x", "y", "z"],
     additionalProperties: false,
   },
 };
@@ -106,28 +108,13 @@ export function modHousingCoords(coords: { x: number; y: number; z: number }) {
   return { x, y, z: coords.z };
 }
 
-export function getMapFromActor(actor: Actor) {
-  if (actor.className.includes("Maps/Village")) {
-    return "kilima-valley";
-  }
-  if (actor.className.includes("Maps/AZ1")) {
-    return "bahari-bay";
-  }
-  if (actor.className.includes("Maps/HousingMaps")) {
-    return "housing";
-  }
-
-  return "unknown";
-}
-
 export function toNode(actor: Actor): Node {
-  const type = actor.className.split(" ")[0];
   return {
-    type,
+    type: actor.type,
     x: actor.x,
     y: actor.y,
     z: actor.z,
-    mapName: getMapFromActor(actor),
+    mapName: actor.mapName,
     timestamp: Date.now(),
     guid: actor.guid,
     name: actor.name,
