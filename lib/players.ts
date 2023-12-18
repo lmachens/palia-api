@@ -19,12 +19,14 @@ export function getPlayers() {
     [guid: string]: {
       name: string;
       skillLevels?: SkillLevels[];
+      lastKnownPrimaryHousingPlotValue?: number;
     };
   } = {};
   Object.entries(db).forEach(([guid, player]) => {
     players[guid] = {
       name: player.name,
       skillLevels: player.skillLevels,
+      lastKnownPrimaryHousingPlotValue: player.lastKnownPrimaryHousingPlotValue,
     };
   });
   return players;
