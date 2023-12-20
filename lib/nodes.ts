@@ -126,6 +126,7 @@ export function toNode(actor: Actor): Node {
     name: actor.name,
     giftHistory: actor.giftHistory,
     skillLevels: actor.skillLevels,
+    lastKnownPrimaryHousingPlotValue: actor.lastKnownPrimaryHousingPlotValue,
   };
 }
 
