@@ -104,7 +104,11 @@ async function handlePOST(req: Request) {
         const isChanged = updatePlayer(node);
         if (isChanged) {
           revalidateByTag(LEADERBOARD_TAG);
-          postToDiscord(`${node.name} updated`);
+          postToDiscord(
+            `${node.name} updated ${
+              node.lastKnownPrimaryHousingPlotValue
+            } ${node.skillLevels?.reduce((acc, skill) => acc + skill.level, 0)}`
+          );
         }
         return;
       }
