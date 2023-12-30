@@ -119,7 +119,7 @@ async function handlePOST(req: Request) {
         if (isChanged) {
           revalidateByTag(RUMMAGE_PILE_TAG);
           postToDiscord(
-            `The Rummage Pile spawned! Check out [PALIA.th.gl](https://palia.th.gl/en/rummage-pile) for the exact location.`
+            `The Rummage Pile spawned at [${node.x}:${node.y}]! Check out [PALIA.th.gl](https://palia.th.gl/en/rummage-pile) for the exact location.`
           );
         }
       }
