@@ -1,3 +1,5 @@
+import { postToDiscord } from "../../lib/discord";
+import { WEEKLY_WANTS_TAG, revalidateByTag } from "../../lib/revalidate";
 import { isValidVersion } from "../../lib/version";
 import { villagers } from "../../lib/villagers";
 import {
@@ -90,6 +92,10 @@ async function handlePOST(req: Request) {
     }
     const weeklyWants = toWeeklyWants(body);
     const updated = updateWeeklyWants(weeklyWants);
+    if (updated) {
+      await revalidateByTag(WEEKLY_WANTS_TAG);
+      await postToDiscord(`Weekly wants updated`);
+    }
     return new Response(updated ? "Updated" : "Not updated", {
       headers: {
         "Access-Control-Allow-Origin": "*",

@@ -1,3 +1,4 @@
+import { postToDiscord } from "../../lib/discord";
 import {
   allGatherables,
   gatherables,
@@ -12,6 +13,11 @@ import {
   validateActors,
 } from "../../lib/nodes";
 import { getPlayers, updatePlayer } from "../../lib/players";
+import {
+  LEADERBOARD_TAG,
+  RUMMAGE_PILE_TAG,
+  revalidateByTag,
+} from "../../lib/revalidate";
 import {
   getTimedLootPiles,
   updateTimedLootPile,
@@ -95,7 +101,11 @@ async function handlePOST(req: Request) {
 
       const normalized = node.type.replace(/_C$/, "");
       if (normalized.startsWith("BP_ValeriaCharacter")) {
-        updatePlayer(node);
+        const isChanged = updatePlayer(node);
+        if (isChanged) {
+          revalidateByTag(LEADERBOARD_TAG);
+          postToDiscord(`${node.name} updated`);
+        }
         return;
       }
       if (normalized.startsWith("BP_Villager")) {
@@ -103,7 +113,11 @@ async function handlePOST(req: Request) {
         return;
       }
       if (normalized.startsWith("BP_ChapaaPile")) {
-        updateTimedLootPile(node);
+        const isChanged = updateTimedLootPile(node);
+        if (isChanged) {
+          revalidateByTag(RUMMAGE_PILE_TAG);
+          postToDiscord(`Rummage pile updated`);
+        }
       }
       if (!allGatherables.includes(normalized) || node.x === 0) {
         return;

@@ -16,7 +16,7 @@ export function getVillagers() {
 
 export function updateVillager(node: Node) {
   if (!villagers.some((v) => v.className === node.type)) {
-    return;
+    return false;
   }
   db[node.type] = {
     mapName: node.mapName,
@@ -24,6 +24,7 @@ export function updateVillager(node: Node) {
     timestamp: Date.now(),
   };
   write();
+  return true;
 }
 
 export const villagers = [

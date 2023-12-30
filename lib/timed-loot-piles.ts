@@ -23,7 +23,7 @@ export function updateTimedLootPile(node: Node) {
     db[node.type].position[1] === node.y &&
     db[node.type].position[2] === node.z
   ) {
-    return;
+    return false;
   }
   db[node.type] = {
     mapName: node.mapName,
@@ -31,4 +31,5 @@ export function updateTimedLootPile(node: Node) {
     timestamp: Date.now(),
   };
   write();
+  return true;
 }

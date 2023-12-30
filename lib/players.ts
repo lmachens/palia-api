@@ -34,8 +34,29 @@ export function getPlayers() {
 
 export function updatePlayer(node: Node) {
   if (!node.skillLevels || node.skillLevels.length === 0) {
-    return;
+    return false;
   }
+  let isChanged = false;
+  if (!db[node.guid!]) {
+    isChanged = true;
+  } else if (
+    db[node.guid!].lastKnownPrimaryHousingPlotValue !==
+    node.lastKnownPrimaryHousingPlotValue
+  ) {
+    isChanged = true;
+  } else if (
+    node.skillLevels.some(
+      (skillLevel) =>
+        !db[node.guid!].skillLevels?.some((skill) => {
+          return (
+            skill.type === skillLevel.type && skill.level === skillLevel.level
+          );
+        })
+    )
+  ) {
+    isChanged = true;
+  }
+
   db[node.guid!] = {
     name: node.name!,
     lastKnownPrimaryHousingPlotValue: node.lastKnownPrimaryHousingPlotValue,
@@ -45,4 +66,6 @@ export function updatePlayer(node: Node) {
     timestamp: Date.now(),
   };
   write();
+
+  return isChanged;
 }
