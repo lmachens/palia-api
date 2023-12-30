@@ -118,6 +118,7 @@ async function handlePOST(req: Request) {
         const isChanged = updateTimedLootPile(node);
         if (isChanged) {
           revalidateByTag(RUMMAGE_PILE_TAG);
+
           postToDiscord(
             `The Rummage Pile spawned at [${node.x}:${node.y}]! Check out [PALIA.th.gl](https://palia.th.gl/en/rummage-pile) for the exact location.`
           );
