@@ -36,26 +36,10 @@ export function updatePlayer(node: Node) {
   if (!node.skillLevels || node.skillLevels.length === 0) {
     return false;
   }
-  let isChanged = false;
-  if (!db[node.guid!]) {
-    isChanged = true;
-  } else if (
-    db[node.guid!].lastKnownPrimaryHousingPlotValue !==
-    node.lastKnownPrimaryHousingPlotValue
-  ) {
-    isChanged = true;
-  } else if (
-    node.skillLevels.some(
-      (skillLevel) =>
-        !db[node.guid!].skillLevels?.some((skill) => {
-          return (
-            skill.type === skillLevel.type && skill.level === skillLevel.level
-          );
-        })
-    )
-  ) {
-    isChanged = true;
-  }
+
+  const previousLevel = getLevel(db[node.guid!]?.skillLevels);
+  const newLevel = getLevel(node.skillLevels);
+  const isChanged = previousLevel !== newLevel;
 
   db[node.guid!] = {
     name: node.name!,
@@ -68,4 +52,8 @@ export function updatePlayer(node: Node) {
   write();
 
   return isChanged;
+}
+
+export function getLevel(skillLevels?: SkillLevels[]) {
+  return skillLevels?.reduce((acc, skill) => acc + skill.level, 0) ?? 0;
 }

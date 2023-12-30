@@ -12,7 +12,7 @@ import {
   toNode,
   validateActors,
 } from "../../lib/nodes";
-import { getPlayers, updatePlayer } from "../../lib/players";
+import { getLevel, getPlayers, updatePlayer } from "../../lib/players";
 import {
   LEADERBOARD_TAG,
   RUMMAGE_PILE_TAG,
@@ -104,11 +104,7 @@ async function handlePOST(req: Request) {
         const isChanged = updatePlayer(node);
         if (isChanged) {
           revalidateByTag(LEADERBOARD_TAG);
-          postToDiscord(
-            `${node.name} updated ${
-              node.lastKnownPrimaryHousingPlotValue
-            } ${node.skillLevels?.reduce((acc, skill) => acc + skill.level, 0)}`
-          );
+          postToDiscord(`${node.name} is level ${getLevel(node.skillLevels)}`);
         }
         return;
       }
