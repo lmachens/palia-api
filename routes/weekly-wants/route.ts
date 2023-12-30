@@ -95,6 +95,9 @@ async function handlePOST(req: Request) {
     if (updated) {
       await revalidateByTag(WEEKLY_WANTS_TAG);
       await postToDiscord(`Weekly wants updated`);
+      postToDiscord(
+        `The Weekly Wants has been updated! Check out [PALIA.th.gl](https://palia.th.gl) or the tracker.`
+      );
     }
     return new Response(updated ? "Updated" : "Not updated", {
       headers: {

@@ -12,7 +12,7 @@ import {
   toNode,
   validateActors,
 } from "../../lib/nodes";
-import { getLevel, getPlayers, updatePlayer } from "../../lib/players";
+import { getLevel, getPlayers, getRank, updatePlayer } from "../../lib/players";
 import {
   LEADERBOARD_TAG,
   RUMMAGE_PILE_TAG,
@@ -103,8 +103,10 @@ async function handlePOST(req: Request) {
       if (normalized.startsWith("BP_ValeriaCharacter")) {
         const isChanged = updatePlayer(node);
         if (isChanged) {
-          revalidateByTag(LEADERBOARD_TAG);
-          postToDiscord(`${node.name} is level ${getLevel(node.skillLevels)}`);
+          const rank = getRank(getLevel(node.skillLevels));
+          if (rank <= 100) {
+            revalidateByTag(LEADERBOARD_TAG);
+          }
         }
         return;
       }
@@ -116,7 +118,9 @@ async function handlePOST(req: Request) {
         const isChanged = updateTimedLootPile(node);
         if (isChanged) {
           revalidateByTag(RUMMAGE_PILE_TAG);
-          postToDiscord(`Rummage pile updated`);
+          postToDiscord(
+            `The Rummage Pile spawned! Check out [PALIA.th.gl](https://palia.th.gl/en/rummage-pile) for the exact location.`
+          );
         }
       }
       if (!allGatherables.includes(normalized) || node.x === 0) {

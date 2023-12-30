@@ -57,3 +57,11 @@ export function updatePlayer(node: Node) {
 export function getLevel(skillLevels?: SkillLevels[]) {
   return skillLevels?.reduce((acc, skill) => acc + skill.level, 0) ?? 0;
 }
+
+export function getRank(level: number) {
+  const players = getPlayers();
+  const sorted = Object.values(players)
+    .map((player) => getLevel(player.skillLevels))
+    .sort((a, b) => b - a);
+  return sorted.indexOf(level) + 1;
+}

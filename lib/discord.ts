@@ -9,7 +9,6 @@ export const postToDiscord = (content: string) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      username: "BottyMcBotface",
       content: content,
     }),
   });
