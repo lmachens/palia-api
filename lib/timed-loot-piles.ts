@@ -15,6 +15,8 @@ export function getTimedLootPiles() {
   return db;
 }
 
+const MIN_TIME_LEFT = 30 * 60 * 1000; // Thirty Minutes
+let lastUpdateAt = 0;
 export function updateTimedLootPile(node: Node) {
   if (
     db[node.type] &&
@@ -25,6 +27,10 @@ export function updateTimedLootPile(node: Node) {
   ) {
     return false;
   }
+  if (Date.now() - lastUpdateAt < MIN_TIME_LEFT) {
+    return false;
+  }
+  lastUpdateAt = Date.now();
   db[node.type] = {
     mapName: node.mapName,
     position: [node.x, node.y, node.z],

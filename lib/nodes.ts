@@ -147,3 +147,11 @@ export function calculateDistance(
   const dy = node1.y - coords[1];
   return Math.sqrt(dx * dx + dy * dy);
 }
+
+export function hasExponent(node: Node) {
+  return (
+    node.x.toString().includes("e-") ||
+    node.y.toString().includes("e-") ||
+    node.z.toString().includes("e-")
+  );
+}

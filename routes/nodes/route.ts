@@ -8,6 +8,7 @@ import {
 import {
   calculateDistance,
   getMinDistance,
+  hasExponent,
   modHousingCoords,
   toNode,
   validateActors,
@@ -92,6 +93,9 @@ async function handlePOST(req: Request) {
 
     let count = 0;
     nodes.forEach((node) => {
+      if (hasExponent(node)) {
+        return;
+      }
       if (node.mapName === "housing") {
         const position = modHousingCoords(node);
         node.x = position.x;
